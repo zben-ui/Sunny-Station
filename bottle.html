@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌊 心晴漂流瓶</title>
+  <link rel="stylesheet" href="style_bottle.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="ocean-background">
+    <div class="waves"></div>
+    <div class="header">
+      <h1><i class="fas fa-water"></i> 心晴漂流瓶</h1>
+      <p class="subtitle">让温暖的文字漂向远方，让善意的回应温暖彼此</p>
+    </div>
+    
+    <div class="paper-container" id="paper">
+      <div class="paper-header">
+        <i class="fas fa-feather-alt"></i> 写下你的心语
+      </div>
+      <textarea id="message" placeholder="在这里写下你想说的话，也许会被远方的某个人看到..."></textarea>
+      <div class="button-row">
+        <button onclick="throwBottle()" class="throw-btn">
+          <i class="fas fa-paper-plane"></i> 投入海中
+        </button>
+        <button onclick="getBottle()" class="get-btn">
+          <i class="fas fa-fish"></i> 捞一个瓶子
+        </button>
+      </div>
+    </div>
+    
+    <img id="bottle" src="images/bottle.png" alt="漂流瓶" />
+    <div id="fetched-message"></div>
+    
+    <div class="floating-items">
+      <div class="floating-bottle"></div>
+      <div class="floating-bubble"></div>
+      <div class="floating-fish"></div>
+    </div>
+  </div>
+
+  <script src="bottle.js"></script>
+</body>
+</html>

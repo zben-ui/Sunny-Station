@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心晴小站 · 治愈花园</title>
+    <link rel="stylesheet" href="css/style_main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .garden-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+        }
+
+        .garden-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c5530;
+        }
+
+        .garden-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .garden-main {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .garden-area {
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .garden-ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, #8B4513, #D2691E);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .plant-container {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .plant {
+            font-size: 4rem;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .plant:hover {
+            transform: scale(1.1);
+        }
+
+        .plant-seed {
+            color: #8B4513;
+        }
+
+        .plant-sprout {
+            color: #90EE90;
+        }
+
+        .plant-growing {
+            color: #32CD32;
+        }
+
+        .plant-flowering {
+            color: #FF69B4;
+        }
+
+        .plant-mature {
+            color: #FFD700;
+        }
+
+        .plant-legendary {
+            color: #9370DB;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #9370DB; }
+            to { text-shadow: 0 0 20px #9370DB, 0 0 30px #9370DB; }
+        }
+
+        .garden-controls {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .control-section {
+            margin-bottom: 2rem;
+        }
+
+        .control-section h3 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .water-btn {
+            background: linear-gradient(135deg, #4FC3F7, #29B6F6);
+            color: white;
+        }
+
+        .sun-btn {
+            background: linear-gradient(135deg, #FFD54F, #FFC107);
+            color: #333;
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, #AB47BC, #8E24AA);
+            color: white;
+        }
+
+        .fertilizer-btn {
+            background: linear-gradient(135deg, #66BB6A, #4CAF50);
+            color: white;
+        }
+
+        .plant-stats {
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .stat-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .water-fill { background: #4FC3F7; }
+        .sun-fill { background: #FFD54F; }
+        .music-fill { background: #AB47BC; }
+        .growth-fill { background: #66BB6A; }
+
+        .plant-history {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .history-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .history-icon {
+            font-size: 1.5rem;
+            color: #4CAF50;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            color: #2c5530;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .achievement {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FFD700, #FFA000);
+            color: #333;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            animation: achievementPop 0.5s ease-out;
+            z-index: 200;
+        }
+
+        @keyframes achievementPop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i> 返回首页
+    </button>
+
+    <div class="garden-container">
+        <div class="garden-header">
+            <h1><i class="fas fa-seedling"></i> 治愈花园</h1>
+            <p>用心呵护你的心情种子，让它茁壮成长</p>
+        </div>
+
+        <div class="garden-main">
+            <div class="garden-area">
+                <div class="garden-ground"></div>
+                <div class="plant-container">
+                    <div class="plant" id="plant">🌱</div>
+                </div>
+            </div>
+
+            <div class="garden-controls">
+                <div class="plant-stats">
+                    <h3>植物状态</h3>
+                    <div class="stat-item">
+                        <span>💧 水分</span>
+                        <span id="waterLevel">50%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill water-fill" id="waterBar" style="width: 50%"></div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span>☀️ 阳光</span>
+                        <span id="sunLevel">50%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill sun-fill" id="sunBar" style="width: 50%"></div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span>🎵 音乐</span>
+                        <span id="musicLevel">50%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill music-fill" id="musicBar" style="width: 50%"></div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span>🌱 成长度</span>
+                        <span id="growthLevel">0%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill growth-fill" id="growthBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>植物护理</h3>
+                    <button class="action-btn water-btn" onclick="waterPlant()">
+                        <i class="fas fa-tint"></i> 浇水
+                    </button>
+                    <button class="action-btn sun-btn" onclick="sunPlant()">
+                        <i class="fas fa-sun"></i> 晒太阳
+                    </button>
+                    <button class="action-btn music-btn" onclick="playMusic()">
+                        <i class="fas fa-music"></i> 播放音乐
+                    </button>
+                    <button class="action-btn fertilizer-btn" onclick="addFertilizer()">
+                        <i class="fas fa-leaf"></i> 施肥
+                    </button>
+                </div>
+
+                <div class="control-section">
+                    <h3>植物信息</h3>
+                    <div id="plantInfo">
+                        <p><strong>阶段:</strong> <span id="plantStage">种子</span></p>
+                        <p><strong>年龄:</strong> <span id="plantAge">0</span> 天</p>
+                        <p><strong>心情记录:</strong> <span id="moodRecords">0</span> 次</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="plant-history">
+            <h3><i class="fas fa-history"></i> 成长记录</h3>
+            <div id="historyList">
+                <div class="history-item">
+                    <div class="history-icon">🌱</div>
+                    <div class="history-content">
+                        <div>欢迎来到治愈花园！</div>
+                        <div class="history-date">今天</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let plantData = {
+            water: 50,
+            sun: 50,
+            music: 50,
+            growth: 0,
+            stage: 0,
+            age: 0,
+            moodRecords: 0,
+            lastWater: Date.now(),
+            lastSun: Date.now(),
+            lastMusic: Date.now(),
+            lastFertilizer: Date.now()
+        };
+
+        const plantStages = [
+            { emoji: '🌱', name: '种子', class: 'plant-seed', minGrowth: 0 },
+            { emoji: '🌿', name: '嫩芽', class: 'plant-sprout', minGrowth: 20 },
+            { emoji: '🌱', name: '小苗', class: 'plant-growing', minGrowth: 40 },
+            { emoji: '🌸', name: '开花', class: 'plant-flowering', minGrowth: 60 },
+            { emoji: '🌻', name: '成熟', class: 'plant-mature', minGrowth: 80 },
+            { emoji: '🌺', name: '传奇', class: 'plant-legendary', minGrowth: 100 }
+        ];
+
+        // 从本地存储加载数据
+        function loadPlantData() {
+            const saved = localStorage.getItem('gardenPlantData');
+            if (saved) {
+                plantData = { ...plantData, ...JSON.parse(saved) };
+            }
+            
+            // 检查心情记录
+            const moodData = JSON.parse(localStorage.getItem('moodData') || '[]');
+            plantData.moodRecords = moodData.length;
+            
+            updatePlantDisplay();
+        }
+
+        // 保存数据到本地存储
+        function savePlantData() {
+            localStorage.setItem('gardenPlantData', JSON.stringify(plantData));
+        }
+
+        // 更新植物显示
+        function updatePlantDisplay() {
+            const plant = document.getElementById('plant');
+            const currentStage = plantStages[plantData.stage];
+            
+            plant.textContent = currentStage.emoji;
+            plant.className = `plant ${currentStage.class}`;
+            
+            // 更新状态栏
+            document.getElementById('waterLevel').textContent = plantData.water + '%';
+            document.getElementById('waterBar').style.width = plantData.water + '%';
+            
+            document.getElementById('sunLevel').textContent = plantData.sun + '%';
+            document.getElementById('sunBar').style.width = plantData.sun + '%';
+            
+            document.getElementById('musicLevel').textContent = plantData.music + '%';
+            document.getElementById('musicBar').style.width = plantData.music + '%';
+            
+            document.getElementById('growthLevel').textContent = plantData.growth + '%';
+            document.getElementById('growthBar').style.width = plantData.growth + '%';
+            
+            // 更新植物信息
+            document.getElementById('plantStage').textContent = currentStage.name;
+            document.getElementById('plantAge').textContent = plantData.age;
+            document.getElementById('moodRecords').textContent = plantData.moodRecords;
+            
+            // 检查是否升级
+            checkStageUpgrade();
+        }
+
+        // 检查植物升级
+        function checkStageUpgrade() {
+            const newStage = plantStages.findIndex(stage => plantData.growth >= stage.minGrowth);
+            if (newStage > plantData.stage) {
+                plantData.stage = newStage;
+                showAchievement(`恭喜！植物升级为 ${plantStages[newStage].name}！`);
+                addHistory(`植物升级为 ${plantStages[newStage].name}！`, '🌱');
+            }
+        }
+
+        // 浇水
+        function waterPlant() {
+            const now = Date.now();
+            if (now - plantData.lastWater < 10000) { // 10秒冷却
+                showMessage('请稍等再浇水！');
+                return;
+            }
+            
+            plantData.water = Math.min(100, plantData.water + 20);
+            plantData.growth += 2;
+            plantData.lastWater = now;
+            
+            updatePlantDisplay();
+            addHistory('给植物浇水了', '💧');
+            showMessage('植物喝饱了水，很开心！');
+        }
+
+        // 晒太阳
+        function sunPlant() {
+            const now = Date.now();
+            if (now - plantData.lastSun < 10000) {
+                showMessage('请稍等再晒太阳！');
+                return;
+            }
+            
+            plantData.sun = Math.min(100, plantData.sun + 20);
+            plantData.growth += 2;
+            plantData.lastSun = now;
+            
+            updatePlantDisplay();
+            addHistory('让植物晒太阳了', '☀️');
+            showMessage('植物享受阳光，茁壮成长！');
+        }
+
+        // 播放音乐
+        function playMusic() {
+            const now = Date.now();
+            if (now - plantData.lastMusic < 10000) {
+                showMessage('请稍等再播放音乐！');
+                return;
+            }
+            
+            plantData.music = Math.min(100, plantData.music + 20);
+            plantData.growth += 1;
+            plantData.lastMusic = now;
+            
+            updatePlantDisplay();
+            addHistory('为植物播放音乐了', '🎵');
+            showMessage('植物听到音乐，心情愉悦！');
+        }
+
+        // 施肥
+        function addFertilizer() {
+            const now = Date.now();
+            if (now - plantData.lastFertilizer < 30000) { // 30秒冷却
+                showMessage('请稍等再施肥！');
+                return;
+            }
+            
+            plantData.growth += 5;
+            plantData.lastFertilizer = now;
+            
+            updatePlantDisplay();
+            addHistory('给植物施肥了', '🍃');
+            showMessage('植物吸收了营养，快速成长！');
+        }
+
+        // 添加历史记录
+        function addHistory(action, icon) {
+            const historyList = document.getElementById('historyList');
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN', {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            historyItem.innerHTML = `
+                <div class="history-icon">${icon}</div>
+                <div class="history-content">
+                    <div>${action}</div>
+                    <div class="history-date">${timeStr}</div>
+                </div>
+            `;
+            
+            historyList.insertBefore(historyItem, historyList.firstChild);
+            
+            // 限制历史记录数量
+            while (historyList.children.length > 10) {
+                historyList.removeChild(historyList.lastChild);
+            }
+        }
+
+        // 显示成就
+        function showAchievement(message) {
+            const achievement = document.createElement('div');
+            achievement.className = 'achievement';
+            achievement.innerHTML = `
+                <h3>🎉 成就解锁！</h3>
+                <p>${message}</p>
+            `;
+            
+            document.body.appendChild(achievement);
+            
+            setTimeout(() => {
+                achievement.remove();
+            }, 3000);
+        }
+
+        // 显示消息
+        function showMessage(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 植物自然生长
+        function naturalGrowth() {
+            // 根据各项指标计算成长速度
+            const avgCondition = (plantData.water + plantData.sun + plantData.music) / 3;
+            const growthRate = avgCondition / 100 * 0.1; // 每小时最多0.1%成长
+            
+            plantData.growth = Math.min(100, plantData.growth + growthRate);
+            
+            // 自然衰减
+            plantData.water = Math.max(0, plantData.water - 0.5);
+            plantData.sun = Math.max(0, plantData.sun - 0.3);
+            plantData.music = Math.max(0, plantData.music - 0.2);
+            
+            updatePlantDisplay();
+            savePlantData();
+        }
+
+        // 返回首页
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPlantData();
+            
+            // 每小时自然生长一次
+            setInterval(naturalGrowth, 60000);
+            
+            // 每分钟保存一次数据
+            setInterval(savePlantData, 60000);
+        });
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</body>
+</html>

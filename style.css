@@ -1,0 +1,191 @@
+/* 背景渐变 */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Helvetica Neue", sans-serif;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+}
+  
+.background {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom right, #dfe9f3, #ffffff);
+}
+  
+/* 主容器 */
+.container {
+    max-width: 800px;
+    margin: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border-radius: 15px;
+}
+  
+/* 顶部 */
+header {
+    background-color: #d5ea1a;
+    color: white;
+    padding: 1rem;
+    font-size: 1.6rem;
+    text-align: center;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+  
+/* 聊天框 */
+.chat-box {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+  
+.message {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+}
+  
+.user {
+    flex-direction: row-reverse;
+}
+  
+.message .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+  
+.bubble {
+    padding: 0.8rem 1rem;
+    max-width: 60%;
+    border-radius: 1rem;
+    background-color: #f1f5f9; /* 颜色更温暖 */
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+  
+.user .bubble {
+    background-color: #dbeafe;
+    align-self: flex-end;
+}
+  
+.ai .bubble {
+    background-color: #e6f4ea;
+    align-self: flex-start;
+}
+  
+/* 输入区域 */
+.input-area {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+    background: #ffffffc5;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+  
+textarea {
+    flex: 1;
+    resize: none;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #f5eb97;
+}
+  
+button {
+    background-color: #f0d569;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    margin-left: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+  
+button:hover {
+    background-color: #ff87fd;
+}
+  
+/* 加载动画 */
+.loading-dots::after {
+    content: '';
+    display: inline-block;
+    animation: dots 1s steps(3, end) infinite;
+}
+  
+@keyframes dots {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+/* 留言区样式 */
+.comment-section {
+    margin-top: 1rem;
+  }
+  
+  .comment-section .comment {
+    background-color: #fff5e6;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comment-section .comment .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .comment-section .comment .content {
+    display: inline-block;
+    font-size: 1rem;
+    color: #5f4b5b;
+  }
+  
+  .comment-section textarea {
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: none;
+    box-sizing: border-box;
+    background-color: #fff9e5;
+    color: #6a4e23;
+  }
+  
+  .comment-section button {
+    background-color: #f0a500;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+  }
+  
+  .comment-section button:hover {
+    background-color: #d67d00;
+  }
+  

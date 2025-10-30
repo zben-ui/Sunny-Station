@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心晴小站 · 心情记录</title>
+    <link rel="stylesheet" href="css/style_main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .mood-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .mood-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .mood-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .mood-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #f8f9ff, #e3eeff);
+        }
+
+        .mood-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .mood-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .mood-text {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            resize: none;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .mood-text:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .save-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .save-btn:hover {
+            background: #5c71d6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .mood-history {
+            margin-top: 2rem;
+        }
+
+        .mood-entry {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mood-entry .mood-icon {
+            font-size: 2rem;
+        }
+
+        .mood-entry .mood-content {
+            flex: 1;
+        }
+
+        .mood-entry .mood-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .mood-entry .mood-text-content {
+            margin-top: 0.5rem;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="site-header">
+        <div class="logo-title">心晴小站</div>
+        <div class="subtitle">记录你的心情，让情绪可视化，与自己的内心对话</div>
+    </div>
+
+    <div class="mood-container">
+        <div class="mood-header">
+            <h1><i class="fas fa-heart"></i> 心情记录</h1>
+            <p>选择你今天的心情，写下你的感受</p>
+        </div>
+
+        <div class="mood-selector">
+            <div class="mood-option" data-mood="very-happy" title="非常开心">
+                <i class="fas fa-laugh"></i>
+            </div>
+            <div class="mood-option" data-mood="happy" title="开心">
+                <i class="fas fa-smile"></i>
+            </div>
+            <div class="mood-option" data-mood="neutral" title="平静">
+                <i class="fas fa-meh"></i>
+            </div>
+            <div class="mood-option" data-mood="sad" title="难过">
+                <i class="fas fa-frown"></i>
+            </div>
+            <div class="mood-option" data-mood="very-sad" title="非常难过">
+                <i class="fas fa-sad-tear"></i>
+            </div>
+        </div>
+
+        <textarea class="mood-text" id="moodText" placeholder="写下你今天的心情和感受..."></textarea>
+        
+        <div style="text-align: center;">
+            <button class="save-btn" onclick="saveMood()">
+                <i class="fas fa-save"></i> 保存心情
+            </button>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">心情变化趋势</div>
+            <canvas id="moodChart" width="400" height="200"></canvas>
+        </div>
+
+        <div class="mood-history">
+            <h3><i class="fas fa-history"></i> 心情记录历史</h3>
+            <div id="moodHistory"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedMood = null;
+        let moodData = JSON.parse(localStorage.getItem('moodData') || '[]');
+        let moodChart = null;
+
+        // 心情选项点击事件
+        document.querySelectorAll('.mood-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除其他选项的选中状态
+                document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+                // 添加当前选项的选中状态
+                this.classList.add('selected');
+                selectedMood = this.dataset.mood;
+                
+                // 添加动画效果
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.1)';
+                }, 200);
+            });
+        });
+
+        // 保存心情
+        function saveMood() {
+            if (!selectedMood) {
+                alert('请先选择你的心情');
+                return;
+            }
+
+            const moodText = document.getElementById('moodText').value.trim();
+            if (!moodText) {
+                alert('请写下你的心情感受');
+                return;
+            }
+
+            const moodEntry = {
+                id: Date.now(),
+                mood: selectedMood,
+                text: moodText,
+                date: new Date().toISOString(),
+                timestamp: new Date().getTime()
+            };
+
+            moodData.push(moodEntry);
+            localStorage.setItem('moodData', JSON.stringify(moodData));
+
+            // 清空输入
+            document.getElementById('moodText').value = '';
+            document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+            selectedMood = null;
+
+            // 更新图表和历史记录
+            updateChart();
+            updateHistory();
+
+            // 显示成功提示
+            showToast('心情记录保存成功！');
+        }
+
+        // 更新图表
+        function updateChart() {
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            
+            if (moodChart) {
+                moodChart.destroy();
+            }
+
+            const moodValues = {
+                'very-happy': 5,
+                'happy': 4,
+                'neutral': 3,
+                'sad': 2,
+                'very-sad': 1
+            };
+
+            const moodLabels = {
+                'very-happy': '非常开心',
+                'happy': '开心',
+                'neutral': '平静',
+                'sad': '难过',
+                'very-sad': '非常难过'
+            };
+
+            const chartData = moodData.map(entry => ({
+                x: new Date(entry.date),
+                y: moodValues[entry.mood]
+            }));
+
+            moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '心情指数',
+                        data: chartData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            }
+                        },
+                        y: {
+                            min: 0,
+                            max: 5,
+                            ticks: {
+                                callback: function(value) {
+                                    const moodNames = ['', '非常难过', '难过', '平静', '开心', '非常开心'];
+                                    return moodNames[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 更新历史记录
+        function updateHistory() {
+            const historyContainer = document.getElementById('moodHistory');
+            
+            if (moodData.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>还没有心情记录，开始记录你的心情吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const moodIcons = {
+                'very-happy': 'fas fa-laugh',
+                'happy': 'fas fa-smile',
+                'neutral': 'fas fa-meh',
+                'sad': 'fas fa-frown',
+                'very-sad': 'fas fa-sad-tear'
+            };
+
+            const moodColors = {
+                'very-happy': '#4CAF50',
+                'happy': '#8BC34A',
+                'neutral': '#FFC107',
+                'sad': '#FF9800',
+                'very-sad': '#F44336'
+            };
+
+            historyContainer.innerHTML = moodData
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(entry => `
+                    <div class="mood-entry">
+                        <div class="mood-icon" style="color: ${moodColors[entry.mood]}">
+                            <i class="${moodIcons[entry.mood]}"></i>
+                        </div>
+                        <div class="mood-content">
+                            <div class="mood-date">${new Date(entry.date).toLocaleString('zh-CN')}</div>
+                            <div class="mood-text-content">${entry.text}</div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // 显示提示消息
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #667eea;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateChart();
+            updateHistory();
+        });
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</body>
+</html>

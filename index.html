@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>心晴小站</title>
+  <link rel="stylesheet" href="css/style_main.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* 响应式轮播图容器 */
+    .carousel-container {
+      width: min(90vw, 800px); /* 响应式宽度 */
+      height: min(50vh, 400px); /* 响应式高度 */
+      overflow: hidden;
+      position: relative;
+      margin: 2rem auto; /* 使容器居中 */
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 10px;
+    }
+
+    .carousel-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      object-fit: cover;
+      opacity: 0;
+      transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+      border-radius: 15px;
+      filter: brightness(0.9) contrast(1.1);
+    }
+
+    .carousel-image.active {
+      opacity: 1;
+      z-index: 1;
+      transform: translate(-50%, -50%) scale(1.02);
+      filter: brightness(1) contrast(1.2);
+    }
+
+    /* 移除未使用的button-container样式 */
+
+    /* 轮播图指示器 */
+    .carousel-indicators {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: white;
+      transform: scale(1.2);
+    }
+
+    .indicator:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    /* 网页介绍部分 */
+    .web-description {
+      text-align: center;
+      padding: 2rem;
+      margin: 2rem auto;
+      font-size: 1.1rem;
+      color: #333;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 255, 0.95));
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      max-width: 80%;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      line-height: 1.8;
+    }
+    /* 移除未使用的site-title样式 */
+
+    .floating-elements {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.3), rgba(102, 126, 234, 0.1));
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50px;
+      animation: cloudMove 25s infinite linear;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cloud::before {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+    }
+
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+    }
+
+    .cloud1 {
+      width: 80px;
+      height: 40px;
+      top: 15%;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .cloud1::before {
+      width: 50px;
+      height: 50px;
+      top: -25px;
+      left: 10px;
+    }
+
+    .cloud1::after {
+      width: 60px;
+      height: 40px;
+      top: -15px;
+      right: 10px;
+    }
+
+    .cloud2 {
+      width: 100px;
+      height: 50px;
+      top: 25%;
+      right: -120px;
+      animation-delay: -5s;
+    }
+
+    .cloud2::before {
+      width: 60px;
+      height: 60px;
+      top: -30px;
+      left: 15px;
+    }
+
+    .cloud2::after {
+      width: 70px;
+      height: 50px;
+      top: -20px;
+      right: 15px;
+    }
+
+    .sun {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #FFD700, #FFA500);
+      border-radius: 50%;
+      top: 8%;
+      right: 12%;
+      animation: sunRotate 40s infinite linear;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .sun::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 40%, rgba(255, 215, 0, 0.3) 40%);
+      border-radius: 50%;
+      animation: sunGlow 3s ease-in-out infinite alternate;
+    }
+
+    .grass {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(to top, #228B22, #32CD32, #90EE90);
+      animation: grassSway 6s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .grass::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: 
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 8px,
+          rgba(34, 139, 34, 0.4) 8px,
+          rgba(34, 139, 34, 0.4) 12px,
+          transparent 12px,
+          transparent 20px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 2px,
+          transparent 6px,
+          rgba(50, 205, 50, 0.3) 6px,
+          rgba(50, 205, 50, 0.3) 10px,
+          transparent 10px,
+          transparent 18px
+        );
+      animation: grassDetail 8s ease-in-out infinite;
+    }
+
+    .grass::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: 
+        radial-gradient(ellipse at 20% 100%, rgba(144, 238, 144, 0.6) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 100%, rgba(50, 205, 50, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 100%, rgba(34, 139, 34, 0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(144, 238, 144, 0.3) 0%, transparent 50%);
+      animation: grassShadows 10s ease-in-out infinite;
+    }
+
+    /* 草地装饰元素 */
+    .grass-decoration {
+      position: absolute;
+      bottom: 40px;
+      font-size: 1.5rem;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .flower1 {
+      left: 15%;
+      animation: flowerSway 4s ease-in-out infinite;
+    }
+
+    .flower2 {
+      left: 35%;
+      animation: flowerSway 5s ease-in-out infinite 1s;
+    }
+
+    .flower3 {
+      left: 65%;
+      animation: flowerSway 6s ease-in-out infinite 2s;
+    }
+
+    .butterfly {
+      left: 80%;
+      bottom: 50px;
+      animation: butterflyFly 8s ease-in-out infinite;
+    }
+
+    @keyframes flowerSway {
+      0%, 100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 0.8;
+      }
+      25% {
+        transform: rotate(2deg) scale(1.1);
+        opacity: 1;
+      }
+      50% {
+        transform: rotate(-1deg) scale(0.9);
+        opacity: 0.9;
+      }
+      75% {
+        transform: rotate(1deg) scale(1.05);
+        opacity: 0.95;
+      }
+    }
+
+    @keyframes butterflyFly {
+      0%, 100% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateX(10px) translateY(-5px) rotate(5deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(-5px) translateY(-10px) rotate(-3deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateX(5px) translateY(-3px) rotate(2deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0.3;
+      }
+      25% {
+        opacity: 0.8;
+      }
+      50% {
+        transform: translate(150px, 150px) rotate(180deg) scale(1.2);
+        opacity: 0.6;
+      }
+      75% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg) scale(1);
+        opacity: 0.3;
+      }
+    }
+
+    @keyframes cloudMove {
+      0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateX(25vw) translateY(-10px);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(50vw) translateY(5px);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateX(75vw) translateY(-5px);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateX(calc(100vw + 200px)) translateY(0);
+        opacity: 0.6;
+      }
+    }
+
+    @keyframes sunRotate {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+      50% {
+        transform: rotate(180deg) scale(1.1);
+      }
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    @keyframes sunGlow {
+      0% {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+      }
+      100% {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes grassSway {
+      0%, 100% {
+        transform: skewX(0deg) scaleY(1);
+        filter: hue-rotate(0deg);
+      }
+      25% {
+        transform: skewX(1deg) scaleY(1.02);
+        filter: hue-rotate(5deg);
+      }
+      50% {
+        transform: skewX(2deg) scaleY(1.05);
+        filter: hue-rotate(10deg);
+      }
+      75% {
+        transform: skewX(1deg) scaleY(1.02);
+        filter: hue-rotate(5deg);
+      }
+    }
+
+    @keyframes grassDetail {
+      0%, 100% {
+        transform: translateX(0) scaleY(1);
+        opacity: 0.8;
+      }
+      33% {
+        transform: translateX(2px) scaleY(1.1);
+        opacity: 0.6;
+      }
+      66% {
+        transform: translateX(-1px) scaleY(0.9);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes grassShadows {
+      0%, 100% {
+        transform: translateX(0) scale(1);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateX(3px) scale(1.05);
+        opacity: 0.5;
+      }
+      50% {
+        transform: translateX(-2px) scale(0.95);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateX(1px) scale(1.02);
+        opacity: 0.6;
+      }
+    }
+
+    .floating-element:nth-child(1) {
+      top: 15%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+
+    .floating-element:nth-child(2) {
+      top: 25%;
+      right: 15%;
+      animation-delay: -3s;
+    }
+
+    .floating-element:nth-child(3) {
+      bottom: 25%;
+      left: 25%;
+      animation-delay: -6s;
+    }
+
+    .floating-element:nth-child(4) {
+      bottom: 15%;
+      right: 25%;
+      animation-delay: -9s;
+    }
+
+    /* 页面加载动画 */
+    body {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    .feature-card {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .site-header {
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: slideInDown 1s ease-out 0.2s forwards;
+    }
+
+    .carousel-container {
+      opacity: 0;
+      transform: scale(0.9);
+      animation: fadeInScale 1s ease-out 0.5s forwards;
+    }
+
+    .site-features {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 1s ease-out 0.8s forwards;
+    }
+
+    .warm-tips {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 1s ease-out 1.1s forwards;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 功能区域网格布局：桌面端固定 4 列（8 个按钮显示为 4x2） */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .carousel-container {
+        width: 95vw;
+        height: min(40vh, 300px);
+        margin: 1rem auto;
+      }
+      
+      .web-description {
+        max-width: 95%;
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .sun {
+        width: 40px;
+        height: 40px;
+        top: 5%;
+        right: 8%;
+      }
+      
+      .cloud1, .cloud2 {
+        display: none;
+      }
+
+      .grass-decoration {
+        font-size: 1.2rem;
+      }
+
+      .flower1 {
+        left: 10%;
+      }
+
+      .flower2 {
+        left: 30%;
+      }
+
+      .flower3 {
+        left: 60%;
+      }
+
+      .butterfly {
+        left: 75%;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .carousel-container {
+        height: min(35vh, 250px);
+      }
+      
+      .web-description {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .grass-decoration {
+        font-size: 1rem;
+      }
+
+      .flower1 {
+        left: 8%;
+      }
+
+      .flower2 {
+        left: 25%;
+      }
+
+      .flower3 {
+        left: 55%;
+      }
+
+      .butterfly {
+        left: 70%;
+        bottom: 45px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .logo-title {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    /* 无障碍访问优化 */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* 情绪泡泡特殊图标样式 */
+    .feature-card[onclick*="bubble_game"] .feature-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .bubble-icon {
+      border-radius: 50%;
+      position: relative;
+      animation: bubbleFloat 3s ease-in-out infinite;
+    }
+
+    .bubble-icon::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 30%;
+      width: 30%;
+      height: 30%;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+    }
+
+    .bubble-large {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      animation-delay: 0s;
+    }
+
+    .bubble-medium {
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(135deg, #5c71d6, #667eea);
+      animation-delay: 0.5s;
+    }
+
+    .bubble-small {
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #764ba2, #5c71d6);
+      animation-delay: 1s;
+    }
+
+    .feature-card[onclick*="bubble_game"]:hover .bubble-icon {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    @keyframes bubbleFloat {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-8px) scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    /* 高对比度模式支持 */
+    @media (prefers-contrast: high) {
+      .feature-card {
+        border: 2px solid #333;
+      }
+      
+      .carousel-image {
+        filter: contrast(1.2);
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="sun"></div>
+    <div class="grass"></div>
+    <!-- 草地装饰元素 -->
+    <div class="grass-decoration flower1">🌸</div>
+    <div class="grass-decoration flower2">🌼</div>
+    <div class="grass-decoration flower3">🌺</div>
+    <div class="grass-decoration butterfly">🦋</div>
+  </div>
+
+  <div class="site-header">
+    <div class="logo-title">心晴小站</div>
+    <div class="subtitle">《心晴小站》是一款以心理健康与情绪陪伴为核心主题的交互式网页。作品旨在通过温暖的视觉设计、轻量的交互体验与趣味化的小游戏，为用户提供一个能"倾诉情绪、记录心情、放松心灵"的线上空间。网页整体风格柔和、简约，搭配动态动画与交互反馈，营造出"陪伴式"的用户体验。</div>
+  </div>
+
+  <!-- 轮播图区域 -->
+  <div class="carousel-container">
+    <img src="images/1.png" class="carousel-image active" alt="心理健康图片1" />
+    <img src="images/2.png" class="carousel-image" alt="心理健康图片2" />
+    <img src="images/3.png" class="carousel-image" alt="心理健康图片3" />
+    <img src="images/4.png" class="carousel-image" alt="心理健康图片4" />
+    <div class="carousel-indicators">
+      <div class="indicator active" onclick="goToSlide(0)"></div>
+      <div class="indicator" onclick="goToSlide(1)"></div>
+      <div class="indicator" onclick="goToSlide(2)"></div>
+      <div class="indicator" onclick="goToSlide(3)"></div>
+    </div>
+  </div>
+
+  <!-- 功能区域 -->
+  <div class="features-grid">
+    <div class="feature-card" onclick="location.href='ai.html'">
+      <div class="feature-icon">
+        <i class="fas fa-comments"></i>
+      </div>
+      <div class="feature-title">AI对话</div>
+      <div class="feature-desc">智能心理咨询，倾听你的心声</div>
+    </div>
+    
+    <div class="feature-card" onclick="location.href='mood_tracking.html'">
+      <div class="feature-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="feature-title">心情记录</div>
+      <div class="feature-desc">记录心情，生成情绪折线图</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='bottle.html'">
+      <div class="feature-icon">
+        <i class="fas fa-paper-plane"></i>
+      </div>
+      <div class="feature-title">漂流瓶</div>
+      <div class="feature-desc">分享烦恼，收获温暖</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='bubble_game.html'">
+      <div class="feature-icon">
+        <div class="bubble-icon bubble-large"></div>
+        <div class="bubble-icon bubble-medium"></div>
+        <div class="bubble-icon bubble-small"></div>
+      </div>
+      <div class="feature-title">情绪泡泡</div>
+      <div class="feature-desc">点击泡泡释放压力，收获治愈语句</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='garden_game.html'">
+      <div class="feature-icon">
+        <i class="fas fa-seedling"></i>
+      </div>
+      <div class="feature-title">治愈花园</div>
+      <div class="feature-desc">培育心情种子，见证成长历程</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='psychology_cards.html'">
+      <div class="feature-icon">
+        <i class="fas fa-brain"></i>
+      </div>
+      <div class="feature-title">心理知识</div>
+      <div class="feature-desc">翻转卡片学习心理健康知识</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='aud/video.html'">
+      <div class="feature-icon">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="feature-title">图片分析</div>
+      <div class="feature-desc">AI识别人物心理状态</div>
+    </div>
+
+    <div class="feature-card" onclick="location.href='reading.html'">
+      <div class="feature-icon">
+        <i class="fas fa-book-reader"></i>
+      </div>
+      <div class="feature-title">阳光阅读</div>
+      <div class="feature-desc">精选心理文章，温暖心灵</div>
+    </div>
+  </div>
+
+  <!-- 特色功能展示 -->
+  <div class="site-features">
+    <h2>心晴小站特色</h2>
+    <div class="features-content">
+      <div class="feature-item">
+        <i class="fas fa-heart"></i>
+        <h3>心理关怀</h3>
+        <p>为用户提供一个可自我表达与情绪释放的平台，通过温暖的视觉设计和交互体验，让心理健康主题更具参与感与趣味性</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-chart-line"></i>
+        <h3>可视化陪伴</h3>
+        <p>将心情记录与可视化展示结合，形成"情绪成长"的体验，通过情绪折线图展示心情变化趋势</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-gamepad"></i>
+        <h3>趣味解压</h3>
+        <p>通过情绪泡泡小游戏和治愈花园等模块帮助用户缓解压力、调节心态，在点击过程中释放压力、调整心情</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-seedling"></i>
+        <h3>正向引导</h3>
+        <p>以温暖语言与互动反馈，引导用户形成积极的心理暗示，通过AI生成安慰语和鼓励语提供持续的心理陪伴</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-comments"></i>
+        <h3>树洞互动</h3>
+        <p>用户可以匿名留言倾诉情绪，也可以浏览并点赞他人的留言，系统会调用AI接口自动生成安慰语或鼓励语</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-book-open"></i>
+        <h3>心理知识</h3>
+        <p>通过翻转卡片的形式展示心理知识，简单直观的设计增强了趣味性和信息吸收的主动性</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 温馨提示 -->
+  <div class="warm-tips">
+    <h2>温馨提示</h2>
+    <p>心晴小站致力于为每一位用户提供温暖的心理支持空间。我们相信，每个人都值得被倾听、被理解。无论你正经历什么，这里都会是你的温暖港湾。网页整体以用户情绪为中心设计，从即时互动到长期陪伴构成完整的情绪疗愈体验，让网页不只是工具，而是一个"能听懂你心情的朋友"。</p>
+  </div>
+
+  <script>
+    // 轮播图功能
+    const images = document.querySelectorAll('.carousel-image');
+    const indicators = document.querySelectorAll('.indicator');
+    let current = 0;
+    let carouselInterval;
+
+    function goToSlide(index) {
+      // 移除当前活动状态
+      images[current].classList.remove('active');
+      indicators[current].classList.remove('active');
+      
+      // 设置新的活动状态
+      current = index;
+      images[current].classList.add('active');
+      indicators[current].classList.add('active');
+    }
+
+    function nextSlide() {
+      const next = (current + 1) % images.length;
+      goToSlide(next);
+    }
+
+    function startCarousel() {
+      carouselInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopCarousel() {
+      clearInterval(carouselInterval);
+    }
+
+    // 轮播图鼠标悬停控制
+    const carouselContainer = document.querySelector('.carousel-container');
+    carouselContainer.addEventListener('mouseenter', stopCarousel);
+    carouselContainer.addEventListener('mouseleave', startCarousel);
+
+    // 初始化轮播图
+    startCarousel();
+
+    // 添加滚动动画效果
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // 观察所有功能卡片
+    document.querySelectorAll('.feature-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    // 添加页面加载动画
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+      
+      // 为浮动元素添加随机延迟
+      document.querySelectorAll('.floating-element').forEach((element, index) => {
+        element.style.animationDelay = `${index * 2}s`;
+      });
+    });
+
+    // 添加键盘导航支持
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        const prev = current === 0 ? images.length - 1 : current - 1;
+        goToSlide(prev);
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
+      }
+    });
+
+    // 添加触摸滑动支持
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    carouselContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // 向左滑动，显示下一张
+          nextSlide();
+        } else {
+          // 向右滑动，显示上一张
+          const prev = current === 0 ? images.length - 1 : current - 1;
+          goToSlide(prev);
+        }
+      }
+    }
+
+    // 性能优化：使用requestAnimationFrame
+    function smoothScroll() {
+      const cards = document.querySelectorAll('.feature-card');
+      cards.forEach(card => {
+        const cardTop = card.getBoundingClientRect().top;
+        if (cardTop < window.innerHeight * 0.8) {
+          card.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      requestAnimationFrame(smoothScroll);
+    });
+  </script>
+</body>
+</html>

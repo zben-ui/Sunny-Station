@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心晴小站 · 情绪泡泡</title>
+    <link rel="stylesheet" href="css/style_main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .game-header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 100;
+        }
+
+        .game-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .game-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .score-board {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 6s infinite linear;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+
+        .bubble-very-happy {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .bubble-happy {
+            background: linear-gradient(135deg, #8BC34A, #CDDC39);
+        }
+
+        .bubble-neutral {
+            background: linear-gradient(135deg, #FFC107, #FFEB3B);
+        }
+
+        .bubble-sad {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+        }
+
+        .bubble-very-sad {
+            background: linear-gradient(135deg, #F44336, #E91E63);
+        }
+
+        .healing-message {
+            position: absolute;
+            background: rgba(255,255,255,0.95);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: messageAppear 2s ease-out;
+            z-index: 200;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleExplode 1s ease-out forwards;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes messageAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes particleExplode {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translate(var(--random-x), var(--random-y));
+            }
+        }
+
+        .game-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="gameContainer">
+        <div class="game-header">
+            <h1><i class="fas fa-bubbles"></i> 情绪泡泡</h1>
+            <p>点击泡泡释放压力，收获治愈语句</p>
+        </div>
+
+        <div class="score-board">
+            <div>已点击: <span id="clickCount">0</span> 个泡泡</div>
+            <div>治愈语句: <span id="messageCount">0</span> 条</div>
+        </div>
+
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </button>
+
+        <div class="game-controls">
+            <button class="control-btn" onclick="startGame()">
+                <i class="fas fa-play"></i> 开始游戏
+            </button>
+            <button class="control-btn" onclick="pauseGame()">
+                <i class="fas fa-pause"></i> 暂停游戏
+            </button>
+            <button class="control-btn" onclick="resetGame()">
+                <i class="fas fa-refresh"></i> 重新开始
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let gameRunning = false;
+        let clickCount = 0;
+        let messageCount = 0;
+        let bubbleInterval = null;
+
+        // 治愈语句库
+        const healingMessages = [
+            "你很棒，继续保持！",
+            "每一天都是新的开始",
+            "相信自己，你能做到",
+            "困难只是成长的垫脚石",
+            "你的努力终会有回报",
+            "保持微笑，世界因你而美好",
+            "每一次挫折都是成长的机会",
+            "你是独一无二的，值得被爱",
+            "明天会更好，加油！",
+            "你的存在让世界更美好",
+            "坚持就是胜利",
+            "阳光总在风雨后",
+            "你是最棒的自己",
+            "爱自己，才能爱别人",
+            "每一天都值得珍惜",
+            "你的笑容是最美的风景",
+            "勇敢面对，一切都会好起来",
+            "你是生活的艺术家",
+            "保持初心，方得始终",
+            "你的努力不会白费"
+        ];
+
+        // 泡泡类型
+        const bubbleTypes = [
+            { class: 'bubble-very-happy', emoji: '😄' },
+            { class: 'bubble-happy', emoji: '😊' },
+            { class: 'bubble-neutral', emoji: '😐' },
+            { class: 'bubble-sad', emoji: '😔' },
+            { class: 'bubble-very-sad', emoji: '😢' }
+        ];
+
+        function createBubble() {
+            if (!gameRunning) return;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            // 随机选择泡泡类型
+            const bubbleType = bubbleTypes[Math.floor(Math.random() * bubbleTypes.length)];
+            bubble.classList.add(bubbleType.class);
+            
+            // 随机大小
+            const size = Math.random() * 60 + 40; // 40-100px
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            
+            // 随机水平位置
+            bubble.style.left = Math.random() * (window.innerWidth - size) + 'px';
+            
+            // 添加点击事件
+            bubble.addEventListener('click', function(e) {
+                e.stopPropagation();
+                popBubble(bubble);
+            });
+
+            document.getElementById('gameContainer').appendChild(bubble);
+
+            // 6秒后自动移除
+            setTimeout(() => {
+                if (bubble.parentNode) {
+                    bubble.remove();
+                }
+            }, 6000);
+        }
+
+        function popBubble(bubble) {
+            // 播放音效（模拟）
+            playPopSound();
+            
+            // 创建粒子效果
+            createParticles(bubble);
+            
+            // 显示治愈语句
+            showHealingMessage(bubble);
+            
+            // 更新分数
+            clickCount++;
+            document.getElementById('clickCount').textContent = clickCount;
+            
+            // 移除泡泡
+            bubble.remove();
+        }
+
+        function createParticles(bubble) {
+            const rect = bubble.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // 创建多个粒子
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                
+                // 随机方向
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 50 + Math.random() * 50;
+                const randomX = Math.cos(angle) * distance;
+                const randomY = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--random-x', randomX + 'px');
+                particle.style.setProperty('--random-y', randomY + 'px');
+                
+                document.body.appendChild(particle);
+                
+                // 1秒后移除粒子
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 1000);
+            }
+        }
+
+        function showHealingMessage(bubble) {
+            const rect = bubble.getBoundingClientRect();
+            const message = document.createElement('div');
+            message.className = 'healing-message';
+            message.textContent = healingMessages[Math.floor(Math.random() * healingMessages.length)];
+            
+            // 随机位置
+            const x = rect.left + (Math.random() - 0.5) * 200;
+            const y = rect.top - 50;
+            
+            message.style.left = Math.max(10, Math.min(x, window.innerWidth - 310)) + 'px';
+            message.style.top = Math.max(10, y) + 'px';
+            
+            document.body.appendChild(message);
+            
+            // 3秒后移除消息
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.remove();
+                }
+            }, 3000);
+            
+            messageCount++;
+            document.getElementById('messageCount').textContent = messageCount;
+        }
+
+        function playPopSound() {
+            // 创建简单的音效
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function startGame() {
+            if (gameRunning) return;
+            
+            gameRunning = true;
+            bubbleInterval = setInterval(createBubble, 1500); // 每1.5秒创建一个泡泡
+        }
+
+        function pauseGame() {
+            gameRunning = false;
+            if (bubbleInterval) {
+                clearInterval(bubbleInterval);
+                bubbleInterval = null;
+            }
+        }
+
+        function resetGame() {
+            pauseGame();
+            clickCount = 0;
+            messageCount = 0;
+            document.getElementById('clickCount').textContent = '0';
+            document.getElementById('messageCount').textContent = '0';
+            
+            // 清除所有泡泡和消息
+            document.querySelectorAll('.bubble, .healing-message, .particle').forEach(el => el.remove());
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // 点击空白区域也可以创建泡泡
+        document.getElementById('gameContainer').addEventListener('click', function(e) {
+            if (e.target === this && gameRunning) {
+                createBubble();
+            }
+        });
+
+        // 页面加载时自动开始游戏
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(startGame, 1000);
+        });
+    </script>
+</body>
+</html>

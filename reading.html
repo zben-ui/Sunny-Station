@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>阳光阅读</title>
+  <link rel="stylesheet" href="css/style_main.css" />
+  <style>
+    /* 页面标题区域 */
+    .header {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 2rem 0;
+      background: linear-gradient(to right, #ffe082, #ffecb3);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-family: 'Pacifico', sans-serif; /* 手写体或现代字体 */
+      color: #5c3c00;
+      margin: 0;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 文字阴影 */
+      letter-spacing: 2px; /* 字间距 */
+      animation: slideIn 1s ease-out;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #777;
+      margin-top: 0.5rem;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* 文章卡片容器 */
+    .article-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem;
+    }
+
+    /* 文章卡片样式 */
+    .article-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .article-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .article-card .content {
+      padding: 1rem;
+    }
+
+    .article-card .content h3 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .article-card .content p {
+      color: #777;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* 响应式布局 */
+    @media (max-width: 768px) {
+      .article-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 标题区域 -->
+  <div class="header">
+    <h1>阳光阅读</h1>
+    <p>享受每一篇文章的阳光</p>
+  </div>
+
+  <!-- 文章列表 -->
+  <div class="article-container">
+    <!-- 文章1 -->
+    <div class="article-card" onclick="location.href='article1.html'">
+      <img src="images/1.png" alt="文章1" />
+      <div class="content">
+        <h3>《晨光里的褶皱》</h3>
+        <p>推窗的瞬间，晨光像刚拆封的蜂蜜倾泻进来。晾衣绳上的水珠折射出七色光谱，麻雀在瓦楞间啄食去年残留的稻谷壳。我总爱在这个时刻端着搪瓷缸，看蒸汽在睫毛上凝成细珠。
+            那些被我们称为"失败"的褶皱，原来只是未完成的褶裥。巷口王奶奶每天都在修复老式缝纫机，她总说："布料皱了才好裁剪，人生也是这样。"昨夜暴雨冲散的绣球花，在水泥缝里重新鼓起花苞。我们总急于抚平生命纹路，却不知每道折痕都在练习与自己和解。
+            下次当你被负面情绪浸透时，试试捧起冰凉的铸铁锅，感受掌心温度慢慢渗透金属。就像这锅底的氧化层，岁月留痕从不是缺陷，而是承接晨光的最佳纹理。</p>
+      </div>
+    </div>
+
+    <!-- 文章2 -->
+    <div class="article-card" onclick="location.href='article2.html'">
+      <img src="images/2.png" alt="文章2" />
+      <div class="content">
+        <h3>《黄昏修理铺》</h3>
+        <p>斜阳把整条街染成褪色的橙子汽水，修鞋匠阿福正在给旧皮鞋上蜡。他说每道划痕都有记忆坐标，像树木年轮般忠实记录旅程。我常坐在他矮凳旁，看他用鹿皮布擦拭岁月的氧化层。
+            那天我带来裂开的登山靴，阿福突然从工具箱摸出老花镜："看，这里藏着阿尔卑斯山的雪粒。"放大镜下，皮革纹理里果然闪烁着水晶状反光。原来所有破损都藏着宇宙馈赠的微光，只要我们愿意用显微镜视角观察。
+            暮色渐浓时，修理铺的霓虹灯亮起"补心"字样。阿福递来修复好的靴子，附赠一小块鹿皮布："定期擦拭悲伤，它会变成护甲。"走出店门，发现晚霞正在给整条街镀金，连裂缝都变得波光粼粼。</p>
+      </div>
+    </div>
+
+    <!-- 文章3 -->
+    <div class="article-card" onclick="location.href='article3.html'">
+      <img src="images/3.png" alt="文章3" />
+      <div class="content">
+        <h3>《雨天图书馆法则》</h3>
+        <p>雨滴在玻璃上画出歪斜的五线谱时，我总能遇见最温柔的自己。撑着油纸伞拐进图书馆，门禁感应器发出的"滴"声像时光的节拍器。三楼靠窗座位永远留着给流浪猫的空位，今天它正用粉红肉垫摩挲着《小王子》的烫金封面。
+            书架间隙藏着治愈密码：第7排第3层的《瓦尔登湖》第107页，铅笔标注着"湖水冻结时，能听见鱼群游动的歌声"。雨天图书馆法则第一条：任何泪水都可以假装是雨滴；第二条：翻书声是最好的止痛药；第三条：窗台暖光永远比咖啡更提神。
+            当电子屏幕灼伤眼睛时，不妨让雨声成为背景乐。那些被数字化生活挤压的感官，会在纸页摩挲间重新苏醒。就像此刻我正用指尖丈量《草叶集》的厚度，每个凸起的字母都在提醒：我们依然拥有触碰真实的权利。</p>
+      </div>
+    </div>
+
+    <!-- 文章4 -->
+    <div class="article-card" onclick="location.href='article4.html'">
+      <img src="images/4.png" alt="文章4" />
+      <div class="content">
+        <h3>《深夜便利店的光晕》</h3>
+        <p>凌晨三点的货架永远比心理医生更懂人心。我总在失眠夜选择7-11，看荧光灯管把泡面包装映成水母色。收银台后的阿叔会默默递来热可可，杯底压着纸条："加糖比例是秘密，甜度由你决定。"
+            冰柜玻璃上凝结的水雾，恰巧框住月食全过程。我用手指在雾面画下未寄出的信，字迹随着温度交换逐渐消融。这种转瞬即逝的创作，比永恒更接近幸福本质。
+            当年轻人在便利架间徘徊时，阿叔会递上地图般褶皱的手："寻找答案时，先看看问题长什么样子。"那些被货架分类的人生困惑，在荧光灯下变得透明可触。原来所有深夜的痛，都能在便利店光晕里找到临时解药。</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

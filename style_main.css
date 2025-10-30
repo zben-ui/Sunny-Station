@@ -1,0 +1,65 @@
+/* 页面整体背景 */
+body {
+    margin: 0;
+    font-family: "Hiragino Sans GB", "Segoe UI", sans-serif;
+    background: linear-gradient(to bottom right, #fffde7, #fff8e1); /* 黄白渐变 */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* 轮播图容器 */
+  .carousel-container {
+    width: 100vw;
+    height: 50vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* 每张图片样式 */
+  .carousel-image {
+    position: absolute;
+    width: 100vw;
+    height: 50vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  /* 当前图片显示 */
+  .carousel-image.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  /* 按钮区域 */
+  .button-container {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 80%;
+    max-width: 600px;
+  }
+  
+  /* 按钮样式 */
+  .button-container button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 1.5rem;
+    background: linear-gradient(to right, #ffe082, #ffecb3); /* 柔和黄色渐变 */
+    color: #5c3c00;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* 按钮悬停效果 */
+  .button-container button:hover {
+    background: linear-gradient(to right, #ffd54f, #fff8e1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  }
+  
