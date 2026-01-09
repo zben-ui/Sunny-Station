@@ -729,6 +729,241 @@
       }
     }
 
+    /* 用户登录状态栏 */
+    .user-status-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 1000;
+      animation: slideInRight 0.5s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .user-info i {
+      font-size: 1.5rem;
+      color: #667eea;
+    }
+
+    .user-info img.user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #667eea;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    /* 登录容器 */
+    .login-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 3rem;
+      width: 100%;
+      max-width: 400px;
+      animation: slideInUp 0.5s ease-out;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 2px solid #e0e7ff;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .input-icon {
+      position: relative;
+    }
+
+    .input-icon i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .input-icon input {
+      padding-left: 2.5rem;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+    }
+
+    .register-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: shake 0.5s;
+    }
+
+    .success-message {
+      background: #efe;
+      color: #3c3;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #667eea;
+    }
+
     /* 高对比度模式支持 */
     @media (prefers-contrast: high) {
       .feature-card {
@@ -759,13 +994,65 @@
     <div class="grass-decoration butterfly">🦋</div>
   </div>
 
-  <div class="site-header">
-    <div class="logo-title">心晴小站</div>
-    <div class="subtitle">《心晴小站》是一款以心理健康与情绪陪伴为核心主题的交互式网页。作品旨在通过温暖的视觉设计、轻量的交互体验与趣味化的小游戏，为用户提供一个能"倾诉情绪、记录心情、放松心灵"的线上空间。网页整体风格柔和、简约，搭配动态动画与交互反馈，营造出"陪伴式"的用户体验。</div>
+  <!-- 登录表单（未登录时显示） -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-box">
+      <div class="login-header">
+        <h1><i class="fas fa-heart"></i> 心晴小站</h1>
+        <p>欢迎回来，请先登录</p>
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" name="username" required placeholder="请输入用户名">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">密码</label>
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" name="password" required placeholder="请输入密码">
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <i class="fas fa-sign-in-alt"></i> 登录
+        </button>
+      </form>
+
+      <div class="register-link">
+        还没有账号？<a href="/register">立即注册</a>
+      </div>
+    </div>
   </div>
 
-  <!-- 轮播图区域 -->
-  <div class="carousel-container">
+  <!-- 主页面内容（登录后显示） -->
+  <div class="main-content" id="mainContent" style="display: none;">
+    <!-- 用户状态栏 -->
+    <div class="user-status-bar">
+      <div class="user-info" onclick="showProfile()" style="cursor: pointer;">
+        <img id="userAvatar" src="images/me.png" alt="头像" class="user-avatar">
+        <span id="usernameDisplay"></span>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> 登出
+      </button>
+    </div>
+
+    <div class="site-header">
+      <div class="logo-title">心晴小站</div>
+      <div class="subtitle">《心晴小站》是一款以心理健康与情绪陪伴为核心主题的交互式网页。作品旨在通过温暖的视觉设计、轻量的交互体验与趣味化的小游戏，为用户提供一个能"倾诉情绪、记录心情、放松心灵"的线上空间。网页整体风格柔和、简约，搭配动态动画与交互反馈，营造出"陪伴式"的用户体验。</div>
+    </div>
+
+    <!-- 轮播图区域 -->
+    <div class="carousel-container">
     <img src="images/1.png" class="carousel-image active" alt="心理健康图片1" />
     <img src="images/2.png" class="carousel-image" alt="心理健康图片2" />
     <img src="images/3.png" class="carousel-image" alt="心理健康图片3" />
@@ -884,10 +1171,11 @@
     </div>
   </div>
 
-  <!-- 温馨提示 -->
-  <div class="warm-tips">
-    <h2>温馨提示</h2>
-    <p>心晴小站致力于为每一位用户提供温暖的心理支持空间。我们相信，每个人都值得被倾听、被理解。无论你正经历什么，这里都会是你的温暖港湾。网页整体以用户情绪为中心设计，从即时互动到长期陪伴构成完整的情绪疗愈体验，让网页不只是工具，而是一个"能听懂你心情的朋友"。</p>
+    <!-- 温馨提示 -->
+    <div class="warm-tips">
+      <h2>温馨提示</h2>
+      <p>心晴小站致力于为每一位用户提供温暖的心理支持空间。我们相信，每个人都值得被倾听、被理解。无论你正经历什么，这里都会是你的温暖港湾。网页整体以用户情绪为中心设计，从即时互动到长期陪伴构成完整的情绪疗愈体验，让网页不只是工具，而是一个"能听懂你心情的朋友"。</p>
+    </div>
   </div>
 
   <script>
@@ -1010,6 +1298,135 @@
 
     window.addEventListener('scroll', () => {
       requestAnimationFrame(smoothScroll);
+    });
+
+    // 登录表单处理（本地验证，无需后端）
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const loginBtn = document.getElementById('loginBtn');
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // 显示加载状态
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登录中...';
+        hideError();
+        hideSuccess();
+
+        // 简单的本地验证：用户名和密码都是123456
+        if (username === '123456' && password === '123456') {
+          // 保存登录状态
+          localStorage.setItem('token', 'local_token_' + Date.now());
+          localStorage.setItem('username', username);
+          
+          showSuccess('登录成功！');
+          
+          // 延迟显示主页面
+          setTimeout(() => {
+            showMainContent();
+          }, 500);
+        } else {
+          showError('登录失败，用户名和密码必须都是123456');
+        }
+        
+        // 恢复按钮状态
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> 登录';
+      });
+    }
+
+    function showError(message) {
+      if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        hideSuccess();
+      }
+    }
+
+    function hideError() {
+      if (errorMessage) {
+        errorMessage.classList.remove('show');
+      }
+    }
+
+    function showSuccess(message) {
+      if (successMessage) {
+        successMessage.textContent = message;
+        successMessage.classList.add('show');
+        hideError();
+      }
+    }
+
+    function hideSuccess() {
+      if (successMessage) {
+        successMessage.classList.remove('show');
+      }
+    }
+
+    // 显示主页面内容
+    function showMainContent() {
+      const loginContainer = document.getElementById('loginContainer');
+      const mainContent = document.getElementById('mainContent');
+      
+      if (loginContainer) loginContainer.style.display = 'none';
+      if (mainContent) mainContent.style.display = 'block';
+      
+      // 加载用户信息
+      loadUserInfo();
+    }
+
+    // 隐藏主页面，显示登录表单
+    function showLoginForm() {
+      const loginContainer = document.getElementById('loginContainer');
+      const mainContent = document.getElementById('mainContent');
+      
+      if (loginContainer) loginContainer.style.display = 'flex';
+      if (mainContent) mainContent.style.display = 'none';
+    }
+
+    // 加载用户信息（本地模式，无需后端）
+    function loadUserInfo() {
+      const username = localStorage.getItem('username');
+      if (username) {
+        document.getElementById('usernameDisplay').textContent = username;
+      }
+    }
+
+    // 显示个人信息页面
+    function showProfile() {
+      window.location.href = '/profile.html';
+    }
+
+    // 登出功能
+    async function logout() {
+      if (confirm('确定要登出吗？')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        showLoginForm();
+        // 清空表单
+        if (loginForm) {
+          loginForm.reset();
+        }
+      }
+    }
+
+    // 页面加载时检查登录状态（本地模式，无需后端）
+    window.addEventListener('load', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      
+      if (token && username) {
+        // 直接显示主页面，无需验证token
+        showMainContent();
+      } else {
+        showLoginForm();
+      }
     });
   </script>
 </body>
