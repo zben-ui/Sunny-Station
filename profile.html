@@ -191,45 +191,53 @@
     </div>
 
     <script>
-        // 检查登录状态
+        // 检查登录状态（本地模式，无需后端）
         const token = localStorage.getItem('token');
-        if (!token) {
+        const username = localStorage.getItem('username');
+        if (!token || !username) {
             window.location.href = '/';
         }
 
-        // 加载用户信息
-        async function loadUserInfo() {
-            try {
-                const response = await fetch('/api/user/me', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+        // 默认用户信息
+        const defaultUserInfo = {
+            username: '123456',
+            email: '123456@example.com',
+            createdAt: new Date('2024-01-01').toLocaleString('zh-CN')
+        };
 
-                if (response.ok) {
-                    const userData = await response.json();
-                    document.getElementById('username').textContent = userData.username;
-                    document.getElementById('email').textContent = userData.email;
-                    
-                    if (userData.created_at) {
-                        const date = new Date(userData.created_at);
-                        document.getElementById('createdAt').textContent = date.toLocaleString('zh-CN');
-                    }
-                    
-                    if (userData.avatar) {
-                        document.getElementById('avatarPreview').src = userData.avatar;
-                    }
-                } else {
-                    showError('加载用户信息失败');
-                }
-            } catch (error) {
-                console.error('加载用户信息失败:', error);
-                showError('网络错误，请稍后重试');
+        // 加载用户信息（本地模式，无需后端）
+        function loadUserInfo() {
+            // 从localStorage读取用户名，如果没有则使用默认值
+            const savedUsername = localStorage.getItem('username') || defaultUserInfo.username;
+            
+            // 初始化邮箱和注册时间（如果不存在则保存默认值）
+            if (!localStorage.getItem('userEmail')) {
+                localStorage.setItem('userEmail', defaultUserInfo.email);
+            }
+            if (!localStorage.getItem('userCreatedAt')) {
+                localStorage.setItem('userCreatedAt', defaultUserInfo.createdAt);
+            }
+            
+            const savedEmail = localStorage.getItem('userEmail');
+            const savedCreatedAt = localStorage.getItem('userCreatedAt');
+            
+            // 显示用户信息
+            document.getElementById('username').textContent = savedUsername;
+            document.getElementById('email').textContent = savedEmail;
+            document.getElementById('createdAt').textContent = savedCreatedAt;
+            
+            // 加载头像（从localStorage读取，如果没有则使用默认头像）
+            const savedAvatar = localStorage.getItem('userAvatar');
+            if (savedAvatar) {
+                document.getElementById('avatarPreview').src = savedAvatar;
+            } else {
+                // 首次加载时，如果没有保存的头像，使用默认头像
+                document.getElementById('avatarPreview').src = 'images/me.png';
             }
         }
 
-        // 上传头像
-        document.getElementById('avatarUpload').addEventListener('change', async (e) => {
+        // 上传头像（本地存储，无需后端）
+        document.getElementById('avatarUpload').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
@@ -245,31 +253,25 @@
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('avatar', file);
-
-            try {
-                const response = await fetch('/api/user/avatar', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // 更新头像预览
-                    document.getElementById('avatarPreview').src = data.avatar_url;
-                    showSuccess('头像更新成功！');
-                } else {
-                    showError(data.detail || '头像上传失败');
-                }
-            } catch (error) {
-                console.error('上传头像失败:', error);
-                showError('网络错误，请稍后重试');
-            }
+            // 使用FileReader将图片转为base64
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64Image = event.target.result;
+                
+                // 保存到localStorage
+                localStorage.setItem('userAvatar', base64Image);
+                
+                // 更新头像预览
+                document.getElementById('avatarPreview').src = base64Image;
+                showSuccess('头像更新成功！');
+            };
+            
+            reader.onerror = () => {
+                showError('图片读取失败，请重试');
+            };
+            
+            // 读取文件为Data URL（base64）
+            reader.readAsDataURL(file);
         });
 
         function showError(message) {
