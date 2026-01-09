@@ -1,0 +1,86 @@
+{
+  "123": {
+    "username": "123",
+    "email": "2716930006@qq.com",
+    "hashed_password": "$pbkdf2-sha256$29000$8j6ntJZSKmWMsVYqhVDKOQ$EdIBrM7Wr6ijPRbwozmkVZ2jYyXd5yzhRKJo0YGL52I",
+    "created_at": "2026-01-05T17:13:48.499454",
+    "mood_data": [
+      {
+        "id": 1767778801773,
+        "mood": "very-happy",
+        "text": "我心情",
+        "date": "2026-01-07T09:40:01.773Z",
+        "timestamp": 1767778801773
+      },
+      {
+        "id": 1767778809028,
+        "mood": "happy",
+        "text": "111",
+        "date": "2026-01-07T09:40:09.028Z",
+        "timestamp": 1767778809028
+      },
+      {
+        "id": 1767779110679,
+        "mood": "happy",
+        "text": "1",
+        "date": "2026-01-07T09:45:10.679Z",
+        "timestamp": 1767779110679
+      },
+      {
+        "id": 1767779129945,
+        "mood": "very-happy",
+        "text": "11",
+        "date": "2026-01-07T09:45:29.945Z",
+        "timestamp": 1767779129945
+      },
+      {
+        "id": 1767779135398,
+        "mood": "happy",
+        "text": "111",
+        "date": "2026-01-07T09:45:35.398Z",
+        "timestamp": 1767779135398
+      }
+    ],
+    "garden_data": {}
+  },
+  "123456": {
+    "username": "123456",
+    "email": "zhao18954978146@outlook.com",
+    "hashed_password": "$pbkdf2-sha256$29000$phTC.H.PkbL2PocQwvj/Hw$FaWkH73AqviLWMawTLYVjhw2.Pz2drIxc0AGGPLBAZY",
+    "created_at": "2026-01-07T21:16:14.026552",
+    "mood_data": [],
+    "garden_data": {
+      "water": 50,
+      "sun": 50,
+      "music": 50,
+      "growth": 0,
+      "stage": 0,
+      "age": 0,
+      "moodRecords": 0,
+      "lastWater": null,
+      "lastSun": null,
+      "lastMusic": null,
+      "lastFertilizer": null
+    }
+  },
+  "benben": {
+    "username": "benben",
+    "email": "zben9325@gmail.com",
+    "hashed_password": "$pbkdf2-sha256$29000$kXJuLWXsPYdQCqEU4txbKw$iD4myW3BhNP3nfAHZKV/5HmQbivythkGxg5n7WvkP2U",
+    "created_at": "2026-01-07T21:29:13.792806",
+    "mood_data": [],
+    "garden_data": {
+      "water": 50,
+      "sun": 50,
+      "music": 50,
+      "growth": 0,
+      "stage": 0,
+      "age": 0,
+      "moodRecords": 0,
+      "lastWater": null,
+      "lastSun": null,
+      "lastMusic": null,
+      "lastFertilizer": null
+    }
+  }
+}
