@@ -1396,11 +1396,20 @@
       if (username) {
         document.getElementById('usernameDisplay').textContent = username;
       }
+      
+      // 加载头像（从localStorage读取，如果没有则使用默认头像）
+      const savedAvatar = localStorage.getItem('userAvatar');
+      const avatarElement = document.getElementById('userAvatar');
+      if (savedAvatar && avatarElement) {
+        avatarElement.src = savedAvatar;
+      } else if (avatarElement) {
+        avatarElement.src = 'images/me.png';
+      }
     }
 
     // 显示个人信息页面
     function showProfile() {
-      window.location.href = '/profile.html';
+      window.location.href = 'profile.html';
     }
 
     // 登出功能
@@ -1426,6 +1435,27 @@
         showMainContent();
       } else {
         showLoginForm();
+      }
+    });
+
+    // 当页面从其他页面返回时，刷新用户信息（特别是头像）
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        // 页面变为可见时，刷新用户信息
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        if (token && username) {
+          loadUserInfo();
+        }
+      }
+    });
+
+    // 当页面获得焦点时也刷新用户信息
+    window.addEventListener('focus', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      if (token && username) {
+        loadUserInfo();
       }
     });
   </script>
